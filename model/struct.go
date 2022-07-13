@@ -1,5 +1,10 @@
 package model
 
+import (
+	"encoding/json"
+	"sort"
+)
+
 // World 世界。
 type World struct {
 	Players  []*Player // 玩家。
@@ -24,7 +29,7 @@ type CardBar struct {
 
 // Card 卡片。
 type Card struct {
-	Hero Hero
+	Hero *Hero
 }
 
 // Hero 英雄。
@@ -35,4 +40,48 @@ type Hero struct {
 	Worth  int32   // 身价。示例: 1费、2费、5费。
 	Layer  Layer   // 星级。
 	Skills []int32 // 技能。
+	HP     int64   // 血量。
+	MP     int64   // 蓝量。
+}
+
+// CardGroup 卡组。
+type CardGroup struct {
+	Card      *Card
+	NumOfCard uint32
+}
+
+type StageProbabilityPair struct {
+	Stage       Stage
+	Probability Probability
+}
+
+func ToStageProbabilityPairs(stageToProbabilityMap map[Stage]Probability) []*StageProbabilityPair {
+	stageProbabilityPairs := make([]*StageProbabilityPair, 0)
+	for stage, probability := range stageToProbabilityMap {
+		stageProbabilityPairs = append(stageProbabilityPairs, &StageProbabilityPair{
+			Stage:       stage,
+			Probability: probability,
+		})
+	}
+	sort.Slice(stageProbabilityPairs, func(i, j int) bool {
+		return stageProbabilityPairs[i].Stage < stageProbabilityPairs[j].Stage
+	})
+	return stageProbabilityPairs
+}
+
+func CardGroupsToCards(groups []*CardGroup) []*Card {
+	cards := make([]*Card, 0)
+	for _, group := range groups {
+		for i := 0; i < int(group.NumOfCard); i++ {
+			cards = append(cards, deepCopyCard(group.Card))
+		}
+	}
+	return cards
+}
+
+func deepCopyCard(card *Card) *Card {
+	objJson, _ := json.Marshal(card)
+	var c Card
+	_ = json.Unmarshal(objJson, &c)
+	return &c
 }

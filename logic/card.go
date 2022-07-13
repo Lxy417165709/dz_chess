@@ -2,19 +2,24 @@ package logic
 
 import (
 	"github.com/Lxy417165709/dz_chess/model"
+	"github.com/Lxy417165709/dz_chess/util"
 	"math/rand"
-	"sort"
+	"time"
 )
 
+// GetCards 卡池抽卡。
 func GetCards(stageToCardsMap map[model.Stage][]*model.Card,
 	stageToProbabilityMap map[model.Stage]model.Probability, numOfCard int64) []*model.Card {
+
+	rand.Seed(time.Now().Unix())
+
 	cards := make([]*model.Card, 0)
 	for i := 0; i < int(numOfCard); i++ {
-		stageSeed := RandNum(1, 100)
-		stageProbabilityPairs := ToStageProbabilityPairs(stageToProbabilityMap)
+		stageSeed := util.RandNum(1, 100)
+		stageProbabilityPairs := model.ToStageProbabilityPairs(stageToProbabilityMap)
 		for _, pair := range stageProbabilityPairs {
 			//
-			if !isInRange(stageSeed, 1, int(pair.Probability)) {
+			if !util.IsInRange(stageSeed, 1, int(pair.Probability)) {
 				stageSeed -= int(pair.Probability)
 				continue
 			}
@@ -44,31 +49,17 @@ func GetCards(stageToCardsMap map[model.Stage][]*model.Card,
 	return cards
 }
 
-func ToStageProbabilityPairs(stageToProbabilityMap map[model.Stage]model.Probability) []*StageProbabilityPair {
-	stageProbabilityPairs := make([]*StageProbabilityPair, 0)
-	for stage, probability := range stageToProbabilityMap {
-		stageProbabilityPairs = append(stageProbabilityPairs, &StageProbabilityPair{
-			Stage:       stage,
-			Probability: probability,
-		})
-	}
-	sort.Slice(stageProbabilityPairs, func(i, j int) bool {
-		return stageProbabilityPairs[i].Stage < stageProbabilityPairs[j].Stage
-	})
-	return stageProbabilityPairs
+func UpgradeCard(cards []*model.Card) []*model.Card {
+	//layerToIdToCardsMap := model.BuildLayerToIdToCardsMap(cards)
+	//upgradedCards := make([]*model.Card,0)
+	//for layer, idToCardsMap := range layerToIdToCardsMap {
+	//	for id,cards := range idToCardsMap{
+	//
+	//	}
+	//}
+	return nil
 }
 
-type StageProbabilityPair struct {
-	Stage       model.Stage
-	Probability model.Probability
-}
-
-// isInRange num 是否位于区间 [leftEndPoint, rightEndPoint] 内。
-func isInRange(num, leftEndPoint, rightEndPoint int) bool {
-	return num >= leftEndPoint && num <= rightEndPoint
-}
-
-// RandNum 返回区间 [leftEndPoint, rightEndPoint] 中任意数。
-func RandNum(leftEndPoint, rightEndPoint int) int {
-	return rand.Intn(rightEndPoint-leftEndPoint+1) + leftEndPoint
+func getHexadecimalString(num int) string {
+	return ""
 }
