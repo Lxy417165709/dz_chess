@@ -73,13 +73,13 @@ func CardGroupsToCards(groups []*CardGroup) []*Card {
 	cards := make([]*Card, 0)
 	for _, group := range groups {
 		for i := 0; i < int(group.NumOfCard); i++ {
-			cards = append(cards, deepCopyCard(group.Card))
+			cards = append(cards, DeepCopyCard(group.Card))
 		}
 	}
 	return cards
 }
 
-func deepCopyCard(card *Card) *Card {
+func DeepCopyCard(card *Card) *Card {
 	objJson, _ := json.Marshal(card)
 	var c Card
 	_ = json.Unmarshal(objJson, &c)

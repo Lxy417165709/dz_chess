@@ -18,3 +18,24 @@ func TestGetCards(t *testing.T) {
 	cardJson, _ := json.MarshalIndent(model.BuildLayerToIdToCardsMap(cards), "", "\t")
 	fmt.Printf("%+v", string(cardJson))
 }
+
+func TestUpgradeCard(t *testing.T) {
+	cards := UpgradeCard([]*model.Card{
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+		model.DeepCopyCard(model.CardDmxy1),
+	}, model.IdToLayerToCardMap)
+	cardJson, _ := json.MarshalIndent(model.BuildLayerToIdToCardsMap(cards), "", "\t")
+	fmt.Printf("%+v", string(cardJson))
+}

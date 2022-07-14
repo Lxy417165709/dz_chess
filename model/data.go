@@ -55,20 +55,22 @@ var TestCardGroups = []*CardGroup{
 	},
 }
 
+var CardDmxy1 = &Card{
+	Hero: &Hero{
+		ID:     1,
+		Name:   "德玛西亚",
+		Stage:  1,
+		Worth:  1,
+		Layer:  1,
+		Skills: nil,
+		HP:     100,
+		MP:     100,
+	},
+}
+
 var IdToLayerToCardMap = map[int64]map[Layer]*Card{
 	1: {
-		1: &Card{
-			Hero: &Hero{
-				ID:     1,
-				Name:   "德玛西亚",
-				Stage:  1,
-				Worth:  1,
-				Layer:  1,
-				Skills: nil,
-				HP:     100,
-				MP:     100,
-			},
-		},
+		1: CardDmxy1,
 		2: &Card{
 			Hero: &Hero{
 				ID:     1,

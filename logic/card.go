@@ -49,15 +49,27 @@ func GetCards(stageToCardsMap map[model.Stage][]*model.Card,
 	return cards
 }
 
-func UpgradeCard(cards []*model.Card) []*model.Card {
-	//layerToIdToCardsMap := model.BuildLayerToIdToCardsMap(cards)
-	//upgradedCards := make([]*model.Card,0)
-	//for layer, idToCardsMap := range layerToIdToCardsMap {
-	//	for id,cards := range idToCardsMap{
-	//
-	//	}
-	//}
-	return nil
+func UpgradeCard(cards []*model.Card, idToLayerToCardMap map[int64]map[model.Layer]*model.Card) []*model.Card {
+	layerToIdToCardsMap := model.BuildLayerToIdToCardsMap(cards)
+	nextCards := make([]*model.Card, 0)
+	hasUpgradedCard := false
+	for layer, idToCardsMap := range layerToIdToCardsMap {
+		for id, cards := range idToCardsMap {
+			for i := 0; i < len(cards)/3; i++ {
+				if model.IdToLayerToCardMap[id][layer+1] != nil {
+					hasUpgradedCard = true
+					nextCards = append(nextCards, model.DeepCopyCard(idToLayerToCardMap[id][layer+1]))
+				}
+			}
+			for i := 0; i < len(cards)%3; i++ {
+				nextCards = append(nextCards, model.DeepCopyCard(idToLayerToCardMap[id][layer]))
+			}
+		}
+	}
+	if hasUpgradedCard {
+		return UpgradeCard(nextCards, idToLayerToCardMap)
+	}
+	return nextCards
 }
 
 func getHexadecimalString(num int) string {
