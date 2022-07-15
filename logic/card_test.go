@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/Lxy417165709/dz_chess/model"
+	"github.com/Lxy417165709/gutil/obj_util"
 	"testing"
 )
 
@@ -36,6 +37,5 @@ func TestUpgradeCard(t *testing.T) {
 		model.DeepCopyCard(model.CardDmxy1),
 		model.DeepCopyCard(model.CardDmxy1),
 	}, model.IdToLayerToCardMap)
-	cardJson, _ := json.MarshalIndent(model.BuildLayerToIdToCardsMap(cards), "", "\t")
-	fmt.Printf("%+v", string(cardJson))
+	fmt.Printf("%+v", string(obj_util.MustFormatObjectJson(cards)))
 }
